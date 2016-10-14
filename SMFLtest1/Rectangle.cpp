@@ -3,6 +3,7 @@
 //
 
 #include <cstdlib>
+#include <iostream>
 #include "Rectangle.h"
 
 Rectangle::Rectangle() {
@@ -16,13 +17,14 @@ Rectangle::~Rectangle() {
 
 Rectangle::Rectangle(int winX, int winY) {
     srand(time(NULL));
-    posX = getRandom(winX);
-    posY = getRandom(winY);
 
-    width = getRandom( winX / 2 );
-    height = getRandom( winY / 2) ;
+    width = getRandom( winX - 20) + 20;
+    height = getRandom( winY - 20) +20 ;
 
-    color = sf::Color(getRandom(255), getRandom(255), getRandom(255));
+    posX = getRandom(winX - width);
+    posY = getRandom(winY - height);
+
+    color = sf::Color(getRandom(155)+100, getRandom(255), getRandom(255));
 }
 
 Rectangle::Rectangle(int _posX, int _posY, int _width, int _height, sf::Color _color) {
@@ -57,6 +59,17 @@ int Rectangle::getPosX() {
 
 sf::Color Rectangle::getColor() {
     return color;
+}
+
+void Rectangle::print() {
+    std::cout << "[ " << posX << ", " << posY <<" ]\n";
+    std::cout << "[ " << width << ", " << height <<" ]\n";
+}
+
+std::ostream &operator<<(std::ostream &stream, const Rectangle & rectangle) {
+    stream << "[ " << rectangle.posX << ", " << rectangle.posY <<" ] - ";
+    stream << "[ " << rectangle.width << ", " << rectangle.height <<" ]";
+    return stream;
 }
 
 

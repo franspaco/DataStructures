@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <time.h>
+#include <iostream>
 
 class Rectangle {
 private:
@@ -27,6 +28,8 @@ public:
     int getWidth();
     int getHeight();
     sf::Color getColor();
+    void print();
+    friend std::ostream & operator << (std::ostream & stream, const Rectangle & rectangle);
 };
 
 

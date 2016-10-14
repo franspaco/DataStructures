@@ -25,9 +25,12 @@ public:
 
 	Node<T> * getRoot() const { return root; }
 
-	//Homework:
 	void insertAtPosition(T data, int position);
 	void insertAtPosition(Node<T> * new_node, int position);
+
+	T pop();
+    T popLast();
+	T deleteAtPosition(int position);
 	T getDataAtHead();
 	T getDataAtTail();
 	T getDataAtPosition(int position);
@@ -200,4 +203,66 @@ inline T LinkedList<T>::getDataAtPosition(int position) {
 	else {
 		throw std::runtime_error("EXCEPTION: root is null!");
 	}
+}
+
+template<class T>
+T LinkedList<T>::deleteAtPosition(int position) {
+	if (root != nullptr) {
+		if (position > 0) {
+			Node<T> * current = root;
+			int indx = 1;
+			while ((current->getNext() != nullptr) && (indx < position)) {
+				//while to get to the corresponding node or, if impossible, the last one
+				current = current->getNext();
+				indx++;
+			}
+            Node<T> * next = current->getNext();
+            T temp = next->getData();
+            if(current->getNext()->getNext() != nullptr){
+                current->setNext(next->getNext());
+            }else{
+                current->setNext(nullptr);
+            }
+            delete next;
+            return temp;
+		}
+		else {
+			return pop();
+		}
+	}
+	else {
+        std::cout << "Null root!\n";
+		throw std::runtime_error("EXCEPTION: root is null!");
+	}
+}
+
+template<class T>
+T LinkedList<T>::pop() {
+    if (root != nullptr) {
+        T temp = root->getData();
+        if(root->getNext() == nullptr){
+            delete root;
+            root = nullptr;
+        }else{
+            Node<T> * current = root;
+            root = root->getNext();
+            delete current;
+        }
+        return temp;
+    }
+    else {
+        throw std::runtime_error("EXCEPTION: root is null!");
+    }
+}
+
+template <class T>
+T LinkedList<T>::popLast() {
+    if (root != nullptr) {
+        //Not the ideal solution, but keeping track of the length would
+        // require many modifications for now.
+        return deleteAtPosition(getLength()-1);
+    }
+    else {
+        throw std::runtime_error("EXCEPTION: root is null!");
+    }
 }
