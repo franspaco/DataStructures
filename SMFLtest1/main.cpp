@@ -32,7 +32,7 @@ std::mutex mtx;
 void consoleInput(){
     char inpt = '0';
     int temp = 0;
-    Rectangle * rektTemp = new Rectangle();
+    Rectangle rektTemp;
     do{
         pln("Select an option:");
         pln("1 - insert random");
@@ -50,26 +50,29 @@ void consoleInput(){
         mtx.lock();
         switch(inpt){
             case '1':
-                rektTemp->createRandom(WINDOWX, WINDOWY);
-                rekts.put(*rektTemp);
+                //Insert Random
+                rektTemp.createRandom(WINDOWX, WINDOWY);
+                rekts.put(rektTemp);
                 break;
             case '2':
+                //Inser Manual
                 pln("Type in X coordinate:");
                 std::cin >> temp;
-                rektTemp->setPosX(temp);
+                rektTemp.setPosX(temp);
                 pln("Type in Y coordinate:");
                 std::cin >> temp;
-                rektTemp->setPosY(temp);
+                rektTemp.setPosY(temp);
                 pln("Type in width:");
                 std::cin >> temp;
-                rektTemp->setWidth(temp);
+                rektTemp.setWidth(temp);
                 pln("Type in height:");
                 std::cin >> temp;
-                rektTemp->setHeight(temp);
-                rektTemp->randomColor();
-                rekts.put(*rektTemp);
+                rektTemp.setHeight(temp);
+                rektTemp.randomColor();
+                rekts.put(rektTemp);
                 break;
             case '3':
+                //Delete Rectangle with index
                 pln("Select index:");
                 std::cin >> temp;
                 if( (rekts.getLength() > temp) && (temp >= 0) ){
@@ -79,6 +82,7 @@ void consoleInput(){
                 }
                 break;
             case '4':
+                //Delete last
                 if(rekts.getLength() > 0) {
                     rekts.popLast();
                 }else{
@@ -86,6 +90,7 @@ void consoleInput(){
                 }
                 break;
             case '5':
+                //Delete first
                 if(rekts.getLength() > 0) {
                     rekts.pop();
                 }else{
@@ -93,15 +98,18 @@ void consoleInput(){
                 }
                 break;
             case '6':
+                //Print Rectangles
                 rekts.print();
                 break;
             case '7':
+                //make a hundred because we can!
                 for(int i = 0; i < 100; i++){
-                    rektTemp->createRandom(WINDOWX, WINDOWY);
-                    rekts.put(*rektTemp);
+                    rektTemp.createRandom(WINDOWX, WINDOWY);
+                    rekts.put(rektTemp);
                 }
                 break;
             case 'd':
+                //Drop all the rectangles
                 rekts.clear();
                 break;
             case 'q':
@@ -113,12 +121,11 @@ void consoleInput(){
     }while(inpt != 'q');
 
     inside = false;
-    delete rektTemp;
 }
 
 int main() {
     std::srand(std::time(0));
-    std::thread * thread1 = new std::thread(consoleInput);
+    std::thread  thread1(consoleInput);
 
     std::cout << "INITIALIZING WINDOW" << std::endl;
     sf::RenderWindow window(sf::VideoMode(WINDOWX, WINDOWY), "SFML works!");
@@ -137,16 +144,15 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 inside = false;
-                //delete thread1;
             }
         }
         window.clear();
 
-        int length = rekts.getLength();
-
+        int length = rekts.getLength(); //Get list size
         for (int i = 0; i < length; i++) {
             //Draw from list
             try {
+                //Just in case something weird happens
                 Rectangle r = rekts.getDataAtPosition(i);
                 sf::RectangleShape temp;
                 temp.setSize(sf::Vector2f(r.getWidth(), r.getHeight()));
@@ -158,6 +164,10 @@ int main() {
                 text.setPosition(r.getPosX() + r.getWidth() / 2 - 10, r.getPosY() + r.getHeight() / 2 - 10);
                 window.draw(text);
             }catch(std::runtime_error ex){
+                //If error was caught assume the for needs to end
+                //This is of use when deleting big lists in the other thread while
+                // at the middle of this for. So the least is cleared *before* the for is done.
+                // This way
                 break;
             }
         }
@@ -166,6 +176,7 @@ int main() {
         window.display();
     }
 
+    rekts.clear();
     //thread1->join();
     std::cout << "BYE!\n";
 
