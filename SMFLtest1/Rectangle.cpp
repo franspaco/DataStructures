@@ -1,13 +1,12 @@
-//
-// Created by franspaco on 12/10/16.
-//
+/*
+ * Francisco Huelsz
+ * A01019512
+ * SFML Test
+ */
 
-#include <cstdlib>
-#include <iostream>
 #include "Rectangle.h"
 
 Rectangle::Rectangle() {
-
 
 }
 
@@ -15,30 +14,28 @@ Rectangle::~Rectangle() {
 
 }
 
-Rectangle::Rectangle(int winX, int winY) {
-    srand(time(NULL));
-
-    width = getRandom( winX - 20) + 20;
-    height = getRandom( winY - 20) +20 ;
-
-    posX = getRandom(winX - width);
-    posY = getRandom(winY - height);
-
-    color = sf::Color(getRandom(155)+100, getRandom(255), getRandom(255));
-}
-
 Rectangle::Rectangle(int _posX, int _posY, int _width, int _height, sf::Color _color) {
     posX = _posX;
     posY = _posY;
     width = _width;
     height = _height;
-    //color = new sf::Color(R, G, B);
     color = _color;
+}
+
+void Rectangle::createRandom(int winX, int winY) {
+    width  = getRandom( winX - 20) + 20;
+    height = getRandom( winY - 20) + 20;
+
+    posX = getRandom(winX - width);
+    posY = getRandom(winY - height);
+
+    randomColor();
 }
 
 int Rectangle::getRandom(int max) {
     //generar números de 0 a max
-    return rand() % (max + 1);
+    int out = (std::rand() % (max + 1));
+    return out;
 }
 
 int Rectangle::getHeight() {
@@ -70,6 +67,26 @@ std::ostream &operator<<(std::ostream &stream, const Rectangle & rectangle) {
     stream << "[ " << rectangle.posX << ", " << rectangle.posY <<" ] - ";
     stream << "[ " << rectangle.width << ", " << rectangle.height <<" ]";
     return stream;
+}
+
+void Rectangle::setHeight(int inpt) {
+    height = inpt;
+}
+
+void Rectangle::setWidth(int inpt) {
+    width = inpt;
+}
+
+void Rectangle::setPosY(int inpt) {
+    posY = inpt;
+}
+
+void Rectangle::setPosX(int inpt) {
+    posX = inpt;
+}
+
+void Rectangle::randomColor() {
+    color = sf::Color(getRandom(255), getRandom(255), getRandom(255));
 }
 
 

@@ -1,13 +1,22 @@
+/*
+ * Francisco Huelsz
+ * A01019512
+ * SFML Test
+ */
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <mutex>
 #include "LinkedList.h"
 #include "Rectangle.h"
 
 #define WINDOWX  600
 #define WINDOWY  600
+
+
 
 template<class T>
 void pln(T thing) {
@@ -18,26 +27,47 @@ void pln(T thing) {
 bool inside = true;
 LinkedList<Rectangle> rekts;
 LinkedList<sf::RectangleShape> sfrekts;
+std::mutex mtx;
 
 void consoleInput(){
     char inpt = '0';
     int temp = 0;
+    Rectangle * rektTemp = new Rectangle();
     do{
         pln("Select an option:");
         pln("1 - insert random");
         pln("2 - insert manually");
         pln("3 - delete rectangle");
         pln("4 - delete last");
-        pln("5 - print rectangle list");
+        pln("5 - delete first");
+        pln("6 - print rectangle list");
+        pln("7 - please give me 100 rectangles!");
         pln("d - drop all");
         pln("q - Quit");
+
         std::cin >> inpt;
+
+        mtx.lock();
         switch(inpt){
             case '1':
-                rekts.put(Rectangle(WINDOWX, WINDOWY));
+                rektTemp->createRandom(WINDOWX, WINDOWY);
+                rekts.put(*rektTemp);
                 break;
             case '2':
-
+                pln("Type in X coordinate:");
+                std::cin >> temp;
+                rektTemp->setPosX(temp);
+                pln("Type in Y coordinate:");
+                std::cin >> temp;
+                rektTemp->setPosY(temp);
+                pln("Type in width:");
+                std::cin >> temp;
+                rektTemp->setWidth(temp);
+                pln("Type in height:");
+                std::cin >> temp;
+                rektTemp->setHeight(temp);
+                rektTemp->randomColor();
+                rekts.put(*rektTemp);
                 break;
             case '3':
                 pln("Select index:");
@@ -56,7 +86,20 @@ void consoleInput(){
                 }
                 break;
             case '5':
+                if(rekts.getLength() > 0) {
+                    rekts.pop();
+                }else{
+                    pln("No more rectangles!");
+                }
+                break;
+            case '6':
                 rekts.print();
+                break;
+            case '7':
+                for(int i = 0; i < 100; i++){
+                    rektTemp->createRandom(WINDOWX, WINDOWY);
+                    rekts.put(*rektTemp);
+                }
                 break;
             case 'd':
                 rekts.clear();
@@ -66,15 +109,25 @@ void consoleInput(){
             default:
                 break;
         }
+        mtx.unlock();
     }while(inpt != 'q');
+
     inside = false;
+    delete rektTemp;
 }
 
 int main() {
+    std::srand(std::time(0));
     std::thread * thread1 = new std::thread(consoleInput);
 
     std::cout << "INITIALIZING WINDOW" << std::endl;
     sf::RenderWindow window(sf::VideoMode(WINDOWX, WINDOWY), "SFML works!");
+    sf::Font font;
+
+    if(!font.loadFromFile("/usr/share/fonts/truetype/nanum/NanumGothic.ttf")){
+        pln("ERROR LOADING FONT");
+        exit(-1);
+    }
 
     window.setFramerateLimit(60);
 
@@ -91,15 +144,24 @@ int main() {
 
         int length = rekts.getLength();
 
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             //Draw from list
-            Rectangle r = rekts.getDataAtPosition(i);
-            sf::RectangleShape temp;
-            temp.setSize(sf::Vector2f(r.getWidth(), r.getHeight()));
-            temp.setFillColor(r.getColor());
-            temp.setPosition(r.getPosX(), r.getPosY());
-            window.draw(temp);
+            try {
+                Rectangle r = rekts.getDataAtPosition(i);
+                sf::RectangleShape temp;
+                temp.setSize(sf::Vector2f(r.getWidth(), r.getHeight()));
+                temp.setFillColor(r.getColor());
+                temp.setPosition(r.getPosX(), r.getPosY());
+                window.draw(temp);
+
+                sf::Text text(std::to_string(i), font, 20);
+                text.setPosition(r.getPosX() + r.getWidth() / 2 - 10, r.getPosY() + r.getHeight() / 2 - 10);
+                window.draw(text);
+            }catch(std::runtime_error ex){
+                break;
+            }
         }
+
 
         window.display();
     }

@@ -2,7 +2,7 @@
 * Francisco Huelsz
 * A01019512
 * LinkedList.h 
-* v0.3
+* v0.4
 */
 #pragma once
 #include "Node.h"
@@ -12,6 +12,7 @@ template <class T>
 class LinkedList {
 private: 
 	Node<T> * root = nullptr;
+    bool locked;
 public:
 	LinkedList();
 	~LinkedList();
@@ -34,6 +35,8 @@ public:
 	T getDataAtHead();
 	T getDataAtTail();
 	T getDataAtPosition(int position);
+
+
 };
 
 template<class T>
@@ -92,7 +95,7 @@ inline void LinkedList<T>::print() {
 	Node<T> * current = root;
 	int count = 0;
 	while (current!= nullptr) {
-		std::cout << count++ << " --> " << current->getData() << std::endl;
+		std::cout << count++ << " --> " << current->getData() << " @" << current << std::endl;
 		current = current->getNext();
 	}
 }
@@ -159,7 +162,7 @@ inline T LinkedList<T>::getDataAtHead() {
 	}
 	else {
 		//if head is nullptr throw exception
-		throw std::runtime_error("EXCEPTION: root is null!");
+		throw std::runtime_error("EXCEPTION: root is null! (getDataAtHead)");
 	}
 }
 
@@ -177,7 +180,7 @@ inline T LinkedList<T>::getDataAtTail() {
 	}
 	else {
 		//if head is nullptr throw exception
-		throw std::runtime_error("EXCEPTION: root is null!");
+		throw std::runtime_error("EXCEPTION: root is null! (getDataAtTail)");
 	}
 }
 
@@ -201,7 +204,7 @@ inline T LinkedList<T>::getDataAtPosition(int position) {
 		}
 	}
 	else {
-		throw std::runtime_error("EXCEPTION: root is null!");
+		throw std::runtime_error("EXCEPTION: root is null! (getDataAtPos)");
 	}
 }
 
@@ -232,7 +235,7 @@ T LinkedList<T>::deleteAtPosition(int position) {
 	}
 	else {
         std::cout << "Null root!\n";
-		throw std::runtime_error("EXCEPTION: root is null!");
+		throw std::runtime_error("EXCEPTION: root is null! (delAtPos)");
 	}
 }
 
@@ -251,7 +254,7 @@ T LinkedList<T>::pop() {
         return temp;
     }
     else {
-        throw std::runtime_error("EXCEPTION: root is null!");
+        throw std::runtime_error("EXCEPTION: root is null! (pop)");
     }
 }
 
@@ -263,6 +266,6 @@ T LinkedList<T>::popLast() {
         return deleteAtPosition(getLength()-1);
     }
     else {
-        throw std::runtime_error("EXCEPTION: root is null!");
+        throw std::runtime_error("EXCEPTION: root is null! (popLast)");
     }
 }
