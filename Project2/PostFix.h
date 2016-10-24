@@ -16,12 +16,12 @@
 class PostFix {
 private:
     std::string postfix;
-    BinTree<char> tree;
-    LinkedList<TreeNode<char> *> buffer;
+    BinTree<std::string> tree;
+    LinkedList<TreeNode<std::string> *> buffer;
 
     void buildTree();
-    int  recursiveTreeEvaluate(TreeNode<char> * _root);
-    void recursivePostPrint(TreeNode<char> * _root);
+    int  recursiveTreeEvaluate(TreeNode<std::string> * _root);
+    void recursivePostPrint(TreeNode<std::string> * _root);
 public:
 
     PostFix() {}
@@ -34,6 +34,8 @@ public:
     int evaluate();
 
     void printPostTree();
+
+    void printTree() {tree.printTree(); }
 
 };
 
