@@ -5,6 +5,7 @@
  */
 
 #include <cmath>
+#include <stdexcept>
 #include "PostFix.h"
 
 //**************************************************************************************
@@ -46,6 +47,9 @@ void PostFix::buildTree() {
         //Current token
         std::string next = "";
 
+        if(postfix.at(i) == ' ')
+            continue;
+
         //Tokenize string:
         while(i < postfix.length() && postfix.at(i) != ' '){
             //If the char is not a space append to current token
@@ -61,17 +65,25 @@ void PostFix::buildTree() {
             op->setRight(buffer.popLast());
             op->setLeft(buffer.popLast());
 
+            if(op->getRight() == nullptr || op->getLeft() == nullptr){
+                std::cout << "INVALID POSTFIX" << std::endl;
+                return;
+            }
+
             //Add operator TreeNode to buffer LinkedList
             buffer.put(op);
 
             //Set operator as root
             tree.setRoot(op);
         }
-        else {
+        else if (isNumber(next)){
             //If token is a number
             temp = new TreeNode<std::string>(next);
             //Add number TreeNode to buffer LinkedList
             buffer.put(temp);
+        }else{
+            std::cout << "INVALID POSTFIX" << std::endl;
+            throw std::runtime_error("INVALID POSTFIX");
         }
     }
 }
@@ -131,6 +143,14 @@ void PostFix::recursivePostPrint(TreeNode<std::string> *_root) {
     recursivePostPrint(_root->getLeft());
     recursivePostPrint(_root->getRight());
     std::cout << _root->getData() << " ";
+}
+
+bool PostFix::isNumber(std::string in) {
+    for(int i = 0; i < in.length(); i++){
+        if(in.at(0) < '0' || in.at(0) > '9')
+            return false;
+    }
+    return true;
 }
 
 

@@ -95,7 +95,7 @@ inline void LinkedList<T>::print() {
 	Node<T> * current = root;
 	int count = 0;
 	while (current!= nullptr) {
-		std::cout << count++ << " --> " << current->getData() << " @" << current << std::endl;
+		std::cout << count++ << " --> " << current->getData() << std::endl;
 		current = current->getNext();
 	}
 }
@@ -263,7 +263,24 @@ T LinkedList<T>::popLast() {
     if (root != nullptr) {
         //Not the ideal solution, but keeping track of the length would
         // require many modifications for now.
-        return deleteAtPosition(getLength()-1);
+        //return deleteAtPosition(getLength()-1);
+        if(root->getNext() == nullptr){
+            T temp = root->getData();
+            delete root;
+            root = nullptr;
+            return temp;
+        }
+
+        Node<T> * current = root;
+        Node<T> * last = nullptr;
+		while(current->getNext()->getNext() != nullptr){
+            current = current->getNext();
+        }
+        last = current->getNext();
+        T temp = last->getData();
+        delete last;
+        current->setNext(nullptr);
+        return temp;
     }
     else {
         throw std::runtime_error("EXCEPTION: root is null! (popLast)");

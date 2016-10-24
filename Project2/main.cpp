@@ -22,7 +22,7 @@ int main() {
     std::cout << pf.evaluate() << std::endl;
     pf.printPostTree();
 
-    pf.setPostfix("1 2 3 + 8 4 + - + 5 6 * /");
+    pf.setPostfix("1 2 3 + 8 4 + - + 5 4 - /");
     pf.printTree();
     std::cout << pf.evaluate() << std::endl;
     pf.printPostTree();
@@ -36,11 +36,7 @@ int main() {
     pf.printTree();
     std::cout << pf.evaluate() << std::endl;
     pf.printPostTree();
-
-    pf.setPostfix("2 3 4 5 + + 1 + +");
-    pf.printTree();
-    std::cout << pf.evaluate() << std::endl;
-    pf.printPostTree();
+    
 
     return 0;
 }

@@ -22,6 +22,7 @@ private:
     void buildTree();
     int  recursiveTreeEvaluate(TreeNode<std::string> * _root);
     void recursivePostPrint(TreeNode<std::string> * _root);
+    bool isNumber(std::string in);
 public:
 
     PostFix() {}

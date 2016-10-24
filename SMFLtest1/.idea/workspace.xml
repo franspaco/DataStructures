@@ -81,9 +81,10 @@
       <file leaf-file-name="LinkedList.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LinkedList.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-589">
+            <state relative-caret-position="3564">
               <caret line="198" column="12" selection-start-line="198" selection-start-column="12" selection-end-line="198" selection-end-column="12" />
               <folding>
+                <element signature="e#73#90#0" expanded="true" />
                 <element signature="e#4018#4027#0" expanded="true" />
                 <element signature="e#4643#4652#0" expanded="true" />
                 <element signature="e#5474#5483#0" expanded="true" />
@@ -370,12 +371,12 @@
       <workItem from="1476485975244" duration="10816000" />
       <workItem from="1476501098671" duration="166000" />
       <workItem from="1476501368675" duration="412000" />
-      <workItem from="1477252696829" duration="3747000" />
+      <workItem from="1477252696829" duration="4348000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45276000" />
+    <option name="totallyTimeSpent" value="45877000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="218" y="106" width="1378" height="936" extended-state="0" />
@@ -461,6 +462,7 @@
         <state relative-caret-position="72">
           <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
           <folding>
+            <element signature="e#73#90#0" expanded="true" />
             <element signature="e#4018#4027#0" expanded="true" />
             <element signature="e#4643#4652#0" expanded="true" />
             <element signature="e#5474#5483#0" expanded="true" />
@@ -511,6 +513,7 @@
         <state relative-caret-position="72">
           <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
           <folding>
+            <element signature="e#73#90#0" expanded="true" />
             <element signature="e#4018#4027#0" expanded="true" />
             <element signature="e#4643#4652#0" expanded="true" />
             <element signature="e#5474#5483#0" expanded="true" />
@@ -561,6 +564,7 @@
         <state relative-caret-position="72">
           <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
           <folding>
+            <element signature="e#73#90#0" expanded="true" />
             <element signature="e#4018#4027#0" expanded="true" />
             <element signature="e#4643#4652#0" expanded="true" />
             <element signature="e#5474#5483#0" expanded="true" />
@@ -611,6 +615,7 @@
         <state relative-caret-position="4644">
           <caret line="258" column="15" selection-start-line="258" selection-start-column="15" selection-end-line="258" selection-end-column="15" />
           <folding>
+            <element signature="e#73#90#0" expanded="true" />
             <element signature="e#4018#4027#0" expanded="true" />
             <element signature="e#4643#4652#0" expanded="true" />
             <element signature="e#5474#5483#0" expanded="true" />
@@ -821,9 +826,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LinkedList.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-589">
+        <state relative-caret-position="3564">
           <caret line="198" column="12" selection-start-line="198" selection-start-column="12" selection-end-line="198" selection-end-column="12" />
           <folding>
+            <element signature="e#73#90#0" expanded="true" />
             <element signature="e#4018#4027#0" expanded="true" />
             <element signature="e#4643#4652#0" expanded="true" />
             <element signature="e#5474#5483#0" expanded="true" />
