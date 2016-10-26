@@ -48,6 +48,14 @@ public:
     void insert(T data);
     void insert(TreeNode<T> * new_node);
 
+    //Searching:
+    bool search(TreeNode<T> * _root, T data);
+    TreeNode<T> * getMin(TreeNode<T> * _root);
+
+    //Deletion:
+    void remove(T data);
+    TreeNode<T> * removeRec(TreeNode<T> * _root, T data);
+
     //Printing
     void printInOrder() { printInOrder(root); }
     void printTree() { printTree(root, INDENT, '-'); }
@@ -103,6 +111,89 @@ void BinTree<T>::insert(TreeNode<T> *_root, TreeNode<T> *new_node) {
             insert(_root->getRight(), new_node);
     }else
         return; // Do not insert duplicate data
+}
+
+//**************************************************************************************
+//Searching:
+
+template <class T>
+bool BinTree<T>::search(TreeNode<T> * _root, T data)
+{
+    // The data is not found in an empty tree
+    if (_root == nullptr)
+        return false;
+        // Look in the left subtree
+    else if (data < _root->getData())
+        return search(_root->getLeft(), data);
+        // Look in the right subtree
+    else if (data > _root->getData())
+        return search(_root->getRight(), data);
+        // The data has been found
+    else
+        return true;
+}
+
+template <class T>
+TreeNode<T> * BinTree<T>::getMin(TreeNode<T> * _root)
+{
+    // Keep looking for nodes in the left
+    if (_root->getLeft())
+        //if (_root->getLeft() != nullptr)
+        return getMin(_root->getLeft());
+    // Return a node with no left subtree
+    return _root;
+}
+
+//**************************************************************************************
+//Removing:
+template <class T>
+void BinTree<T>::remove(T data) {
+    root = removeRec(root, data);
+}
+
+template <class T>
+TreeNode<T> * BinTree<T>::removeRec(TreeNode<T> * _root, T data) {
+    if (!_root)
+        return nullptr;
+
+    else if (data < _root->getData()) {
+        _root->setLeft(removeRec(_root->getLeft(), data));
+        return _root;
+    }
+    else if (data > _root->getData()) {
+        removeRec(_root->getRight(), data);
+        return _root;
+    }
+    else {
+        //Case 1: leaf node
+        if(!_root->getRight() && !_root->getLeft()){
+            delete _root;
+            return nullptr;
+        }
+        //Case 2: Only left child
+        else if (!root->getRight()){
+            TreeNode<T> * tmp_node = _root->getLeft();
+            delete _root;
+            return tmp_node;
+        }
+        //Case 3: Only right child
+        else if (!root->getRight()){
+            TreeNode<T> * tmp_node = _root->getRight();
+            delete _root;
+            return tmp_node;
+        }
+        //Case 4: Both children
+        else{
+            //Get smallest node
+            TreeNode<T> * tmp_node = getMin(_root->getRight());
+            //Change value in current root
+            _root->setData(tmp_node->getData());
+            //Delete the smallest data fro the right subtree
+            _root->setRight( removeRec(_root->getRight(), tmp_node->getData()) );
+
+            return _root;
+        }
+    }
 }
 
 //**************************************************************************************

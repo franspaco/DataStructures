@@ -38,6 +38,8 @@ public:
 
     void printTree() {tree.printTree(); }
 
+    void clean(){tree.clear(); };
+
 };
 
 

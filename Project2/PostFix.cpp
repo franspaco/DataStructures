@@ -134,7 +134,7 @@ int PostFix::recursiveTreeEvaluate(TreeNode<std::string> *_root) {
 //Print:
 void PostFix::printPostTree() {
     recursivePostPrint(tree.getRoot());
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 void PostFix::recursivePostPrint(TreeNode<std::string> *_root) {
