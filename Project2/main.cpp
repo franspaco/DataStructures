@@ -70,7 +70,5 @@ int main() {
         pln("\n");
     }while(inpt != "q");
 
-    pf.clean();
-
     return 0;
 }
