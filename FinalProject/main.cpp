@@ -288,7 +288,7 @@ void printOptions(){
     pln("4 - delete Edge");
     pln("5 - print breath first");
     pln("6 - print depth first");
-    pln("p - find a bath between two vertex");
+    pln("p - find a path between two vertex");
     pln("f - Fill with test data");
     pln("d - drop all");
     pln("q - Quit");
