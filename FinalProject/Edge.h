@@ -22,7 +22,7 @@ private:
 
 public:
     Edge(Vertex<T,W> * _origin = nullptr, Vertex<T,W> * _destination = nullptr, const W & _weight = 1) :
-            origin(_origin), destination(_destination), weight(_weight) {}
+            origin(_origin), destination(_destination), weight(_weight), visited(false) {}
 
 
     //Visits

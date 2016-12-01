@@ -37,6 +37,8 @@ private:
 
     std::mutex v_mutex;
 
+    std::list<InfoNode<T, W> *> dijkstra;
+
     //Dijkstra
     InfoNode<T,W> * initDijkstra ( std::list<InfoNode<T,W> * > * dijkstra, Vertex<T,W> * origin);
     InfoNode<T,W> * getCheapest( std::list<InfoNode<T,W> * > * dijkstra);
@@ -277,7 +279,13 @@ std::list<Vertex<T,W> *> * Graph<T,W>::findPath(const T & origin_data, const T &
     }
 
     // Find the path from the origin vertex to the destination vertex
-    return findPathPtr(_origin, _destination);
+    try {
+        return findPathPtr(_origin, _destination);
+    }
+    catch (std::runtime_error r_e){
+        pln(r_e.what());
+        return nullptr;
+    }
 }
 
 template<class T, class W>
@@ -285,7 +293,7 @@ std::list<Vertex<T,W> *> *Graph<T,W>::findPathPtr(Vertex<T,W> *origin, Vertex<T,
     if( origin == nullptr || destination == nullptr)
         return nullptr;
     clearVisits();
-    std::list<InfoNode<T, W> *> dijkstra;
+    //std::list<InfoNode<T, W> *> dijkstra;
     InfoNode<T, W> * current_vertex_info_node = nullptr;
     Vertex<T, W> * current_vertex = nullptr;
     Vertex<T, W> * neighbour = nullptr;
@@ -327,11 +335,18 @@ std::list<Vertex<T,W> *> *Graph<T,W>::findPathPtr(Vertex<T,W> *origin, Vertex<T,
         }
         // Continue by checking the next cheapest item in the dijkstra list
         current_vertex_info_node = getCheapest(&dijkstra);
-        current_vertex_info_node->visit();
-        current_vertex = current_vertex_info_node->getVertex();
+        if(current_vertex_info_node != nullptr) {
+            current_vertex_info_node->getVertex()->visit();
+            current_vertex_info_node->visit();
+            current_vertex = current_vertex_info_node->getVertex();
+        }else{
+            clearDijkstra(&dijkstra);
+            v_mutex.unlock();
+            throw std::runtime_error("No path available");
+        }
 
         v_mutex.unlock();
-        //std::this_thread::sleep_for(std::chrono::milliseconds(WAITMILIS));
+        std::this_thread::sleep_for(std::chrono::milliseconds(WAITMILIS));
     }
 
     // Recover the path from origin to destination
@@ -345,6 +360,8 @@ std::list<Vertex<T,W> *> *Graph<T,W>::findPathPtr(Vertex<T,W> *origin, Vertex<T,
 
 template<class T, class W>
 void Graph<T,W>::printPath(std::list<Vertex<T,W> *> * path) {
+    mtx lock(v_mutex);
+
     clearVisits();
 
     Vertex<T,W> * last = nullptr;
@@ -409,10 +426,10 @@ void Graph<T,W>::clearDijkstra(std::list<InfoNode<T,W> *> * dijkstra) {
         dijkstra->pop_front();
     }
 
-    for(InfoNode<T,W> * in : *(dijkstra)){
+    for(InfoNode<T,W> * in : *(dijkstra)) {
         std::cout << in->getVertex() << std::endl;
     }
-    std::cout << "length: " << dijkstra->size() << std::endl;
+
 }
 
 template<class T, class W>
@@ -467,6 +484,9 @@ void Graph<T,W>::debug(){
         std::cout << e->getOrigin()->getData() << " -> " << e->getDestination()->getData() <<  " : " << e->getWeight() << std::endl;
     }
     std::cout << std::endl;
+    for(InfoNode<T,W> * in : dijkstra) {
+        std::cout << in->getVertex() << std::endl;
+    }
 }
 
 

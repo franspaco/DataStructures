@@ -37,7 +37,7 @@ double pRad = WINDOWX / 2.0 - 100;
 
 //FUNCTION DECLARATION (Main Thread)
 void drawVertex(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window, sf::Font font);
-void drawArrows(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window);
+void drawArrows(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window, sf::Font font);
 void generateLocation(std::list<Vertex<int,int> * > * list, int length);
 void drawBackground(sf::RenderWindow *pWindow);
 sf::ConvexShape fillConvex();
@@ -95,7 +95,7 @@ int main(){
         std::list<Vertex<int,int> * > * list = graph.getVertixList();
 
         //Draw arrows representing edges
-        drawArrows(list, &window);
+        drawArrows(list, &window, font);
 
         //Draw Vertex list
         drawVertex(list, &window, font);
@@ -132,7 +132,7 @@ void drawBackground(sf::RenderWindow *window) {
 }
 
 //Draw the arroys representing the edges
-void drawArrows(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window){
+void drawArrows(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window, sf::Font font){
     // Create an arrow triangle
     sf::ConvexShape convex = fillConvex();
 
@@ -172,6 +172,11 @@ void drawArrows(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window){
 
             window->draw(convex);
 
+            sf::Text text(std::to_string(e->getWeight()), font, 15);
+            text.setPosition(destination[0] - 0.2f*vector[0], destination[1] - 0.2f*vector[1]);
+            text.setColor(sf::Color::Magenta);
+            window->draw(text);
+
         }
     }
 }
@@ -194,6 +199,7 @@ void drawVertex(std::list<Vertex<int,int> * > * list, sf::RenderWindow *window, 
     }
 }
 
+// THREAD 2 CODE **************************************************************
 //Test data insertion
 void fill(){
     for( int i = 1; i <= 10; i++){
@@ -203,15 +209,15 @@ void fill(){
     for(int i = 1; i < graph.getLength(); i++){
         graph.addEdge(i,i+1,1);
     }
-    graph.addEdge(graph.getLength(),1,1);
+    graph.addEdge(graph.getLength(), 1, 1);
 
     graph.setStart(1);
 
-    graph.addEdge(1,5,1);
-    graph.addEdge(5,9,1);
-    graph.addEdge(9,3,1);
-    graph.addEdge(3,7,1);
-    graph.addEdge(7,1,1);
+    graph.addEdge(1,5,3);
+    graph.addEdge(5,9,3);
+    graph.addEdge(9,3,3);
+    graph.addEdge(3,7,3);
+    graph.addEdge(7,1,3);
     graph.clearVisits();
 }
 
@@ -232,19 +238,11 @@ void consoleInput(){
                 insertEdge();
                 break;
             case '3':
-                //Delete last
-
-                break;
-            case '4':
-                //Delete first
-
-                break;
-            case '5':
                 //Print Breath First
                 graph.setStart(getStart());
                 graph.printBreadthFirst();
                 break;
-            case '6':
+            case '4':
                 //Print Depth First
                 graph.setStart(getStart());
                 graph.printDepthFirst();
@@ -284,10 +282,8 @@ void printOptions(){
     pln("Select an option:");
     pln("1 - insert Vertex manually");
     pln("2 - insert Edge");
-    pln("3 - delete Vertex");
-    pln("4 - delete Edge");
-    pln("5 - print breath first");
-    pln("6 - print depth first");
+    pln("3 - print breath first");
+    pln("4 - print depth first");
     pln("p - find a path between two vertex");
     pln("f - Fill with test data");
     pln("d - drop all");
@@ -328,5 +324,7 @@ void findPath(){
         graph.printPath(path);
         path->clear();
         delete path;
+    }else{
+        std::cout << "Could not find path!\n";
     }
 }
